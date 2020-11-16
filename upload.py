@@ -46,7 +46,7 @@ blob_video = bucket.blob(to + 'video.mp4')
 blob_json = bucket.blob(to + 'video_info.json')
 blob_video.upload_from_filename(fr + 'video.mp4')
 blob_json.upload_from_filename(fr + 'video_info.json')
-blob_period_json = bucket.blob(to +"angry_periods/periods_info.json")
+blob_period_json = bucket.blob(to +"periods_info.json")
 blob_period_json.upload_from_filename(fr + "periods_info.json")
 while len(evidence_file_names) > 0:
     file_name = evidence_file_names.pop()
