@@ -148,6 +148,7 @@ class CameraController:
             time.sleep(wait_time)
         session_evaluator = SessionEvaluator()
         result = session_evaluator.evaluate(self.session_info)
+        result.angry_warning = self.stream_handler.warning_count
         self.result = result
         # print("#*#*#*#*# Result:")
         # print(self.result)

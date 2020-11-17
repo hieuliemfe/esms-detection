@@ -53,6 +53,7 @@ class EmotionStreamHandler:
         self.angry_duration_per_min = 0
         self.count_minute = 0
         self.temp_warning_time = 0
+        self.warning_count = 0
     
     def add_frame(self, emotion):
 
@@ -73,6 +74,7 @@ class EmotionStreamHandler:
         if tempt_min > self.count_minute:
             self.count_minute = tempt_min
             if self.angry_duration_per_min > angry_duration:
+                self.warning_count += 1
                 self.warning = True
                 self.temp_warning_time = self.temp_time
             self.angry_duration_per_min = 0
