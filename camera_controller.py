@@ -14,6 +14,7 @@ import json
 import socket
 import threading
 import base64
+
 # prevents openCL usage and unnecessary logging messages
 cv2.ocl.setUseOpenCL(False)
 
@@ -68,7 +69,7 @@ class CameraController:
         video_path = self.video_out + "video.mp4"
         print("Path: {}".format(video_path))
         video_writer = cv2.VideoWriter(
-            video_path, cv2.VideoWriter_fourcc('X', '2', '6', '4'), self.video_out_fps, (self.video_out_width, self.video_out_height))
+            video_path, cv2.VideoWriter_fourcc(*'avc1'), self.video_out_fps, (self.video_out_width, self.video_out_height))
         print('detect_from_camera called')
         cap = WebcamVideoStream(src=0).start()
         fps_evaluator = FPS().start()
