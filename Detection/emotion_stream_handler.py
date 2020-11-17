@@ -35,7 +35,7 @@ emotion_maximum_buffer_duration = {
     SAD: 300, 
     SURPRISED: 300}
 
-angry_duration = 20000
+angry_duration = 15000
 class EmotionStreamHandler:
     def __init__(self):
         self.frames = []
@@ -69,7 +69,7 @@ class EmotionStreamHandler:
         if self.temp_warning_time != 0:
             if int(round((self.temp_time - self.temp_warning_time)*1000)) > 3000:
                 self.temp_warning_time = 0
-                self.warning = false
+                self.warning = False
         if tempt_min > self.count_minute:
             self.count_minute = tempt_min
             if self.angry_duration_per_min > angry_duration:
