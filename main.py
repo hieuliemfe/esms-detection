@@ -1,7 +1,7 @@
 
 from path_util import resource_path
 import os
-os.environ['OPENH264_LIBRARY'] = 'D:/Capstone/esms-detection/codec/openh264-1.8.0-win64.dll'
+from multiprocessing import Process
 class Result:
     def __init__(self, result, periods):
         self.result = result
@@ -9,6 +9,10 @@ class Result:
 class Main:
     def __init__(self):
         pass
+
+    def execute (self):
+        p = Process(target=self.start, args=(), name='esms_communicator')
+        p.start()
     
     def start(self):
         import socket
@@ -57,6 +61,7 @@ class Main:
                     json_string = json.dumps(result.__dict__)
                     connection.sendall(f"SessionResult:{json_string}".encode('UTF-8'))
 if __name__ == "__main__":
+    os.environ['OPENH264_LIBRARY'] = resource_path('codec/openh264-1.8.0-win64.dll')
     main = Main()
-    main.start()
+    main.execute()
 
