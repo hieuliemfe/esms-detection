@@ -84,7 +84,6 @@ class CameraController:
             start_time = time.time()
             (connection, address) = server_stream_socket.accept()
             hasFace = False
-            # Find haar cascade to draw bounding box around face
             frame = cap.read()
 
             frame = cv2.flip(frame, 1)
@@ -124,11 +123,14 @@ class CameraController:
             fps_evaluator.update()
             if self.is_stop is True:
                 self.session_info = self.stream_handler.finish()
-                video_writer.release()
-                face_detector.stop()
-                emotion_detector.stop()
-                cap.stop()
+                if emotion_detector is not None:
+                    emotion_detector.stop()
+                if face_detector is not None:
+                    face_detector.stop()
                 fps_evaluator.stop()
+                cap.stop()
+                video_writer.release()
+                
                 print("[INFO] elasped time: {:.2f}".format(fps_evaluator.elapsed()))
                 print("[INFO] approx. FPS: {:.2f}".format(fps_evaluator.fps()))
                 with open(self.video_out + 'video_info.json', 'w') as outfile:
