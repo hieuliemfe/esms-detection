@@ -122,6 +122,7 @@ class CameraController:
             connection.sendall(json.dumps(frame_stream_info.__dict__).encode('UTF-8'))
             connection.close()
             fps_evaluator.update()
+            logging.warning("****************Stop status:{}".format(self.is_stop))
             if self.is_stop is True:
                 self.session_info = self.stream_handler.finish()
                 if emotion_detector is not None:
