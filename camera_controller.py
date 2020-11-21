@@ -58,7 +58,7 @@ class CameraController:
     def set_camera_device(self, device):
         self.cap_device = device
     def start_camera(self):
-        logging.warning('start_camera called')
+        logging.warning('[Cam]: start_camera called')
         self.is_stop = False
         self.stream_handler = EmotionStreamHandler()
         self.detect_thread = threading.Thread(target=self.detect_from_camera, daemon=True)
@@ -67,22 +67,22 @@ class CameraController:
         self.is_stop = True
     def detect_from_camera(self):
         video_path = self.video_out + "video.mp4"
-        logging.warning("Path: {}".format(video_path))
+        logging.warning("[Cam]: Path={}".format(video_path))
         video_writer = cv2.VideoWriter(
             video_path, cv2.VideoWriter_fourcc(*'avc1'), self.video_out_fps, (self.video_out_width, self.video_out_height))
-        logging.warning('detect_from_camera called')
+        logging.warning('[Cam]: detect_from_camera called')
         cap = WebcamVideoStream(src=0).start()
         fps_evaluator = FPS().start()
         face_detector = None
         emotion_detector = None
 
-        logging.warning('make socket')
+        logging.warning('[Cam]: Make socket')
         server_stream_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         server_stream_socket.bind(("127.0.0.1", self.stream_port))
         server_stream_socket.listen()
         while True:
             start_time = time.time()
-            logging.warning('Waiting for connection')
+            logging.warning('[Cam]: Waiting for connection ...')
             (connection, address) = server_stream_socket.accept()
             hasFace = False
             frame = cap.read()
@@ -122,7 +122,7 @@ class CameraController:
             connection.sendall(json.dumps(frame_stream_info.__dict__).encode('UTF-8'))
             connection.close()
             fps_evaluator.update()
-            logging.warning("****************Stop status:{}".format(self.is_stop))
+            logging.warning("[Cam]:****************Stop status:{}".format(self.is_stop))
             if self.is_stop is True:
                 self.session_info = self.stream_handler.finish()
                 if emotion_detector is not None:
@@ -133,8 +133,8 @@ class CameraController:
                 cap.stop()
                 video_writer.release()
 
-                logging.warning("[INFO] elasped time: {:.2f}".format(fps_evaluator.elapsed()))
-                logging.warning("[INFO] approx. FPS: {:.2f}".format(fps_evaluator.fps()))
+                logging.warning("[Cam]:[INFO]--elasped time: {:.2f}".format(fps_evaluator.elapsed()))
+                logging.warning("[Cam]:[INFO]--approx. FPS: {:.2f}".format(fps_evaluator.fps()))
                 with open(self.video_out + 'video_info.json', 'w') as outfile:
                     json.dump([frame_obj.__dict__ for frame_obj in self.session_info.frames], outfile)
                 angry_period = AngryPeriods(self.session_info.periods[0])
