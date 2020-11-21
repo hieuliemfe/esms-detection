@@ -1,7 +1,8 @@
 
 from path_util import resource_path
 import os
-from multiprocessing import Process
+import logging
+# logging.basicConfig(filename='example.log', encoding='utf-8', level=logging.DEBUG)
 class Result:
     def __init__(self, result, periods):
         self.result = result
@@ -10,9 +11,9 @@ class Main:
     def __init__(self):
         pass
 
-    def execute (self):
-        p = Process(target=self.start, args=(), name='esms_communicator')
-        p.start()
+    # def execute (self):
+    #     p = Process(target=self.start, args=(), name='esms_communicator')
+    #     p.start()
     
     def start(self):
         import socket
@@ -25,15 +26,15 @@ class Main:
         camera = CameraController()
         (connection, address) = server_stream_socket.accept()
 
-        print("Waiting for connection ...")
+        logging.warning("Waiting for connection ...")
 
         state = 'end'
-        print("Connected. Waiting for data ...")
+        logging.warning("Connected. Waiting for data ...")
         while True:
             msg = connection.recv(1024)
             msg = msg.decode('UTF-8')
             if msg != "":
-                print(msg)
+                logging.warning(msg)
             if 'start' in msg:
                 if state == 'end':
                     path = msg[6:]
@@ -43,7 +44,7 @@ class Main:
                     camera.start_camera()
                     connection.sendall(b"StreamPort:9090")
             elif msg == "end":
-                print(msg)
+                logging.warning(msg)
                 if state == 'start':
                     state = 'end'
                     camera.stop_camera()
@@ -61,7 +62,7 @@ class Main:
                     json_string = json.dumps(result.__dict__)
                     connection.sendall(f"SessionResult:{json_string}".encode('UTF-8'))
 if __name__ == "__main__":
-    os.environ['OPENH264_LIBRARY'] = resource_path('codec/openh264-1.8.0-win64.dll')
+    # os.environ['OPENH264_LIBRARY'] = resource_path('codec\openh264-1.8.0-win64.dll')
+    logging.warning(f"os.environ{os.environ['OPENH264_LIBRARY']}")
     main = Main()
-    main.execute()
-
+    main.start()

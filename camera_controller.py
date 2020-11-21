@@ -9,11 +9,11 @@ from Detection.face_detector import FaceDetector
 import time
 import cv2
 import numpy as np
-from path_util import resource_path
 import json
 import socket
 import threading
 import base64
+import logging
 
 # prevents openCL usage and unnecessary logging messages
 cv2.ocl.setUseOpenCL(False)
@@ -58,7 +58,7 @@ class CameraController:
     def set_camera_device(self, device):
         self.cap_device = device
     def start_camera(self):
-        print('start_camera called')
+        logging.warning('start_camera called')
         self.is_stop = False
         self.stream_handler = EmotionStreamHandler()
         self.detect_thread = threading.Thread(target=self.detect_from_camera, daemon=True)
@@ -67,20 +67,20 @@ class CameraController:
         self.is_stop = True
     def detect_from_camera(self):
         video_path = self.video_out + "video.mp4"
-        print("Path: {}".format(video_path))
+        logging.warning("Path: {}".format(video_path))
         video_writer = cv2.VideoWriter(
             video_path, cv2.VideoWriter_fourcc(*'avc1'), self.video_out_fps, (self.video_out_width, self.video_out_height))
-        print('detect_from_camera called')
+        logging.warning('detect_from_camera called')
         cap = WebcamVideoStream(src=0).start()
         fps_evaluator = FPS().start()
         face_detector = None
         emotion_detector = None
 
-        print('make socket')
+        logging.warning('make socket')
         server_stream_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         server_stream_socket.bind(("127.0.0.1", self.stream_port))
         server_stream_socket.listen()
-        print('Waiting for connection')
+        logging.warning('Waiting for connection')
         while True:
             start_time = time.time()
             (connection, address) = server_stream_socket.accept()
@@ -131,15 +131,15 @@ class CameraController:
                 fps_evaluator.stop()
                 cap.stop()
                 video_writer.release()
-                
-                print("[INFO] elasped time: {:.2f}".format(fps_evaluator.elapsed()))
-                print("[INFO] approx. FPS: {:.2f}".format(fps_evaluator.fps()))
+
+                logging.warning("[INFO] elasped time: {:.2f}".format(fps_evaluator.elapsed()))
+                logging.warning("[INFO] approx. FPS: {:.2f}".format(fps_evaluator.fps()))
                 with open(self.video_out + 'video_info.json', 'w') as outfile:
                     json.dump([frame_obj.__dict__ for frame_obj in self.session_info.frames], outfile)
                 angry_period = AngryPeriods(self.session_info.periods[0])
                 # self.periods = json.dumps([[ob.__dict__ for ob in lst] for lst in self.session_info.periods])
                 with open(self.video_out + 'periods_info.json', 'w') as outfile:
-                    json.dump([period_obj.__dict__ for period_obj in self.session_info.periods[0]], outfile)    
+                    json.dump([period_obj.__dict__ for period_obj in self.session_info.periods[0]], outfile)
                 break
             end_time = time.time()
             wait_time = (0.05-(end_time - start_time)-0.005)
@@ -150,12 +150,12 @@ class CameraController:
         result = session_evaluator.evaluate(self.session_info)
         result.angry_warning = self.stream_handler.warning_count
         self.result = result
-        # print("#*#*#*#*# Result:")
-        # print(self.result)
+        # logging.warning("#*#*#*#*# Result:")
+        # logging.warning(self.result)
         # for i in range(0, len(self.session_info.periods)):
-        #     print("===={}==== size: {}".format(emotion_dict[i], len(self.session_info.periods[i])))
+        #     logging.warning("===={}==== size: {}".format(emotion_dict[i], len(self.session_info.periods[i])))
         #     for period in self.session_info.periods[i]:
-        #         print(period.__dict__)
+        #         logging.warning(period.__dict__)
         #         duration = int(round((period.period_start - period.period_end)*1000))
         cv2.destroyAllWindows()
         self.finished = True
