@@ -24,16 +24,16 @@ class Main:
         server_stream_socket.bind(("127.0.0.1", 12345))
         server_stream_socket.listen()
         camera = CameraController()
-        logging.warning("Waiting for connection ...")
+        logging.warning("Main: Waiting for connection ...")
         (connection, address) = server_stream_socket.accept()
         state = 'end'
-        logging.warning("Connected. Waiting for data ...")
+        logging.warning("Main: Connected. Waiting for data ...")
         while True:
             msg = connection.recv(1024)
             msg = msg.decode('UTF-8')
             if msg != "":
-                logging.warning("data received...")
-                logging.warning("msg: {}".format(msg))
+                logging.warning("Main: data received...")
+                logging.warning("Main: msg: {}".format(msg))
             if 'start' in msg:
                 if state == 'end':
                     path = msg[6:]
@@ -42,7 +42,7 @@ class Main:
                     camera.set_video_path(path)
                     camera.start_camera()
                     connection.sendall(b"StreamPort:9090")
-            elif msg == "end":
+            elif 'end' in msg':
                 if state == 'start':
                     state = 'end'
                     camera.stop_camera()
@@ -59,9 +59,9 @@ class Main:
                     result = Result(camera.result.__dict__, periods)
                     json_string = json.dumps(result.__dict__)
                     connection.sendall(f"SessionResult:{json_string}".encode('UTF-8'))
-                    logging.warning("msg sent")
+                    logging.warning("Main: msg sent")
 if __name__ == "__main__":
     # os.environ['OPENH264_LIBRARY'] = resource_path('codec\openh264-1.8.0-win64.dll')
-    logging.warning(f"os.environ{os.environ['OPENH264_LIBRARY']}")
+    logging.warning(f"Main: os.environ{os.environ['OPENH264_LIBRARY']}")
     main = Main()
     main.start()
