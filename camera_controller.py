@@ -80,9 +80,9 @@ class CameraController:
         server_stream_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         server_stream_socket.bind(("127.0.0.1", self.stream_port))
         server_stream_socket.listen()
-        logging.warning('Waiting for connection')
         while True:
             start_time = time.time()
+            logging.warning('Waiting for connection')
             (connection, address) = server_stream_socket.accept()
             hasFace = False
             frame = cap.read()
