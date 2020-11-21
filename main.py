@@ -42,7 +42,7 @@ class Main:
                     camera.set_video_path(path)
                     camera.start_camera()
                     connection.sendall(b"StreamPort:9090")
-            elif 'end' in msg':
+            elif 'end' in msg:
                 if state == 'start':
                     state = 'end'
                     camera.stop_camera()
