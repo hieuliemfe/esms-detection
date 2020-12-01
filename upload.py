@@ -13,6 +13,8 @@ ap.add_argument("--fr", help="path for upload")
 ap.add_argument("--to", help="path destination")
 fr = ap.parse_args().fr
 to = ap.parse_args().to
+print(fr)
+print(to)
 
 Path(fr + "/angry_periods/").mkdir(parents=True, exist_ok=True)
 period_file = open(fr + "periods_info.json", 'r')
