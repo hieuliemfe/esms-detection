@@ -65,7 +65,7 @@ class Main:
                         connection.sendall(f"SessionResult:{json_string}".encode('UTF-8'))
                         logging.warning("[Main]: msg sent")
                 elif 'exit' in msg:
-                    if state == 'start'
+                    if state == 'start':
                         state = 'end'
                         camera.stop_camera()
                         while True:
