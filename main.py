@@ -61,6 +61,9 @@ class Main:
                     json_string = json.dumps(result.__dict__)
                     connection.sendall(f"SessionResult:{json_string}".encode('UTF-8'))
                     logging.warning("[Main]: msg sent")
+            elif 'exit' in msg:
+                if state == 'end':
+                    break
 if __name__ == "__main__":
     # os.environ['OPENH264_LIBRARY'] = resource_path('codec\openh264-1.8.0-win64.dll')
     logging.warning(f"[Main]: os.environ['OPENH264_LIBRARY']={os.environ['OPENH264_LIBRARY']}")
