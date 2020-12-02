@@ -65,8 +65,25 @@ class Main:
                         connection.sendall(f"SessionResult:{json_string}".encode('UTF-8'))
                         logging.warning("[Main]: msg sent")
                 elif 'exit' in msg:
-                    if state == 'end':
-                        return
+                    if state == 'start'
+                        state = 'end'
+                        camera.stop_camera()
+                        while True:
+                            if camera.finished is True:
+                                camera.finished = False
+                                break
+                        periods = []
+                        for i in range(0, 8):
+                            sp = []
+                            for period in camera.session_info.periods[i]:
+                                sp.append(period.__dict__)
+                            periods.append(sp)
+                        result = Result(camera.result.__dict__, periods)
+                        json_string = json.dumps(result.__dict__)
+                        connection.sendall(f"SessionResult:{json_string}".encode('UTF-8'))
+                        logging.warning("[Main]: msg sent")
+                    connection.close()
+                    return
 if __name__ == "__main__":
     # os.environ['OPENH264_LIBRARY'] = resource_path('codec\openh264-1.8.0-win64.dll')
     logging.warning(f"[Main]: os.environ['OPENH264_LIBRARY']={os.environ['OPENH264_LIBRARY']}")
