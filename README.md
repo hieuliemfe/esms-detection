@@ -4,6 +4,8 @@ pyinstaller --add-data="Detection/haarcascade_frontalface_default.xml;Detection"
 ## To compile upload.exe
 pyinstaller --onefile --noconsole upload.py
 ## to run main.exe
+$env:OPENH264_LIBRARY=[codec path]; start main.exe  
+example:  
 $env:OPENH264_LIBRARY="D:/Capstone/esms-detection/codec/openh264-1.8.0-win64.dll"; start main.exe
 ## to run upload.exe
 start upload.exe --fr [path to upload] --to [destination in gcloud]  
