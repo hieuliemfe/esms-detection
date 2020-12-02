@@ -16,15 +16,15 @@ class Main:
     #     p.start()
     
     def start(self):
+        import socket
+        import json
+        from pathlib import Path
+        from camera_controller import CameraController
+        server_stream_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        server_stream_socket.bind(("127.0.0.1", 12345))
+        server_stream_socket.listen()
+        camera = CameraController()
         while True:
-            import socket
-            import json
-            from pathlib import Path
-            from camera_controller import CameraController
-            server_stream_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            server_stream_socket.bind(("127.0.0.1", 12345))
-            server_stream_socket.listen()
-            camera = CameraController()
             logging.warning("[Main]: Waiting for connection ...")
             (connection, address) = server_stream_socket.accept()
             state = 'end'
