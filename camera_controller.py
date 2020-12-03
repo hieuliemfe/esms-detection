@@ -82,7 +82,7 @@ class CameraController:
         server_stream_socket.listen()
         while True:
             start_time = time.time()
-            logging.warning('[Cam]: Waiting for connection ...')
+            # logging.warning('[Cam]: Waiting for connection ...')
             (connection, address) = server_stream_socket.accept()
             hasFace = False
             frame = cap.read()
@@ -119,10 +119,13 @@ class CameraController:
 
             img_src = self.encode_img(img)
             frame_stream_info = FrameStreamInfo(img_src, self.stream_handler.warning, self.stream_handler.current_frame.emotion)
-            connection.sendall(json.dumps(frame_stream_info.__dict__).encode('UTF-8'))
+            try:
+                connection.sendall(json.dumps(frame_stream_info.__dict__).encode('UTF-8'))
+            except:
+                logging.warning("[Cam]:[ERROR]--connection.sendall()")
             connection.close()
             fps_evaluator.update()
-            logging.warning("[Cam]:****************Stop status:{}".format(self.is_stop))
+            # logging.warning("[Cam]:****************Stop status:{}".format(self.is_stop))
             if self.is_stop is True:
                 self.session_info = self.stream_handler.finish()
                 if emotion_detector is not None:
@@ -133,8 +136,8 @@ class CameraController:
                 cap.stop()
                 video_writer.release()
 
-                logging.warning("[Cam]:[INFO]--elasped time: {:.2f}".format(fps_evaluator.elapsed()))
-                logging.warning("[Cam]:[INFO]--approx. FPS: {:.2f}".format(fps_evaluator.fps()))
+                logging.warning("[Cam]:[INFO]--elaspedTime={:.2f}".format(fps_evaluator.elapsed()))
+                logging.warning("[Cam]:[INFO]--approxFPS={:.2f}".format(fps_evaluator.fps()))
                 with open(self.video_out + 'video_info.json', 'w') as outfile:
                     json.dump([frame_obj.__dict__ for frame_obj in self.session_info.frames], outfile)
                 angry_period = AngryPeriods(self.session_info.periods[0])
