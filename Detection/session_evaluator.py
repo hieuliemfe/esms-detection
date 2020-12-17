@@ -3,6 +3,9 @@ import json
 from Detection.emotion_stream_handler import angry_duration as ANGRY_DURATION
 NO_FACE_DETECTED_DURATION = 3*60*1000
 emotion_dict = {7: "No face detected", 0: "Angry", 1: "Disgusted", 2: "Fearful", 3: "Happy", 4: "Neutral", 5: "Sad", 6: "Surprised"}
+NEUTRAL = 2
+ANGRY = 0
+NO_FACE_DETECTED = 4
 negative_emotions = [0, 1, 2, 5, 7]
 positive_emotions = [3, 6]
 positive_weight = 0.495
@@ -27,7 +30,7 @@ class SessionEvaluator:
         self.no_face_detected_duration_warning_max = 0
         self.emotionless_warning = False
         self.emotion_level = 0
-        for i in range(0, 8):
+        for i in range(0, 5):
             self.emotions_duration.append(0)
             self.emotions_period_count.append(0)
 
@@ -47,15 +50,15 @@ class SessionEvaluator:
                 elif period.emotion in negative_emotions:
                     self.negative_emotions_duration += period.duration
                     self.negative_emotions_period_count += 1
-                    if period.emotion == 0:
+                    if period.emotion == ANGRY:
                         if period.duration >= ANGRY_DURATION:
                             self.angry_warning += 1
                             if period.duration > self.angry_duration_warning_max:
                                 self.angry_duration_warning_max = period.duration
-                elif period.emotion == 4:
+                elif period.emotion == NEUTRAL:
                     self.neutral_emotions_duration += period.duration
                     self.neutral_emotion_period_count += 1
-                elif period.emotion == 7:
+                elif period.emotion == NO_FACE_DETECTED:
                     self.no_face_detected_period_count += 1
                     self.no_face_detected_duration += period.duration
                     if period.duration >= NO_FACE_DETECTED_DURATION:
@@ -92,7 +95,7 @@ class SessionEvaluator:
         session_info.emotion_level = score
         self.emotion_level = score
         # print("Session Duration: {}".format(session_duration))
-        # for i in range(0, 8):
+        # for i in range(0, 5):
         #     print("=============================================")
         #     print("Emotion: {}".format(emotion_dict[i]))
         #     print("Total Duration: {}".format(self.emotions_duration[i]))

@@ -4,36 +4,56 @@ from Detection.Model.frame_info import FrameInfo
 from Detection.Model.period_info import PeriodInfo
 from Detection.Model.session_info import SessionInfo
 from math import floor
-NO_FACE_DETECTED = 7
+# NO_FACE_DETECTED = 7
+# ANGRY = 0
+# DISGUSTED = 1
+# FEARFUL = 2
+# HAPPY = 3
+# NEUTRAL = 4
+# SAD = 5
+# SURPRISED = 6
 ANGRY = 0
-DISGUSTED = 1
-FEARFUL = 2
-HAPPY = 3
-NEUTRAL = 4
-SAD = 5
-SURPRISED = 6
-emotion_dict = {NO_FACE_DETECTED: "No face detected", ANGRY: "Angry", DISGUSTED: "Disgusted", FEARFUL: "Fearful", HAPPY: "Happy", 
-NEUTRAL: "Neutral", SAD: "Sad", SURPRISED: "Surprised"}
+HAPPY = 1
+NEUTRAL = 2
+OTHER = 3
+NO_FACE_DETECTED = 4
+# emotion_dict = {NO_FACE_DETECTED: "No face detected", ANGRY: "Angry", DISGUSTED: "Disgusted", FEARFUL: "Fearful", HAPPY: "Happy", 
+# NEUTRAL: "Neutral", SAD: "Sad", SURPRISED: "Surprised"}
+emotion_dict = {ANGRY: "Angry", HAPPY: "Happy", NEUTRAL: "Neutral", OTHER: "Other", NO_FACE_DETECTED: "No face detected"}
 
 # duration in miliseconds to be considered a valid emotion period
 emotion_valid_duration = {
     NO_FACE_DETECTED: 4000, 
     ANGRY: 250, 
-    DISGUSTED: 250, 
-    FEARFUL: 250, 
     HAPPY: 500, 
     NEUTRAL: 1000, 
-    SAD: 250, 
-    SURPRISED: 500}
+    OTHER: 1000
+}
 emotion_maximum_buffer_duration = {
     NO_FACE_DETECTED: 300, 
     ANGRY: 3000, 
-    DISGUSTED: 400, 
-    FEARFUL: 400, 
     HAPPY: 300, 
     NEUTRAL: 300, 
-    SAD: 300, 
-    SURPRISED: 300}
+    OTHER: 300
+}
+# emotion_valid_duration = {
+#     NO_FACE_DETECTED: 4000, 
+#     ANGRY: 250, 
+#     DISGUSTED: 250, 
+#     FEARFUL: 250, 
+#     HAPPY: 500, 
+#     NEUTRAL: 1000, 
+#     SAD: 250, 
+#     SURPRISED: 500}
+# emotion_maximum_buffer_duration = {
+#     NO_FACE_DETECTED: 300, 
+#     ANGRY: 3000, 
+#     DISGUSTED: 400, 
+#     FEARFUL: 400, 
+#     HAPPY: 300, 
+#     NEUTRAL: 300, 
+#     SAD: 300, 
+#     SURPRISED: 300}
 
 angry_duration = 15000
 class EmotionStreamHandler:
@@ -43,7 +63,7 @@ class EmotionStreamHandler:
         self.previous_frame = FrameInfo(None, None, None)
         self.periods = []
         self.temp_durations = []
-        for i in range (0, 8):
+        for i in range (0, 5):
             self.periods.append([])
             self.temp_durations.append([0,0])
         self.session_begind = 0
@@ -79,7 +99,7 @@ class EmotionStreamHandler:
                 self.temp_warning_time = self.temp_time
             self.angry_duration_per_min = 0
         if self.previous_frame.timestamp is not None:
-            for i in range(0, 8):
+            for i in range(0, 5):
                 duration = int(round((self.current_frame.timestamp - self.previous_frame.timestamp)*1000))
                 if self.previous_frame.emotion == i and self.temp_durations[i] == [0,0]:
                     self.periods[i].append(PeriodInfo(self.previous_frame.timestamp, self.current_frame.timestamp, i))

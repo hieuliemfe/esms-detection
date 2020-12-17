@@ -25,7 +25,7 @@ class EmotionDetector:
         self.model.add(Flatten())
         self.model.add(Dense(1024, activation='relu'))
         self.model.add(Dropout(0.5))
-        self.model.add(Dense(7, activation='softmax'))
+        self.model.add(Dense(4, activation='softmax'))
         prediction = self.model.predict(self.image)
         self.emotion = int(np.argmax(prediction))
 

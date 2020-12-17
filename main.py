@@ -55,7 +55,7 @@ class Main:
                                     camera.finished = False
                                     break
                             periods = []
-                            for i in range(0, 8):
+                            for i in range(0, 5):
                                 sp = []
                                 for period in camera.session_info.periods[i]:
                                     sp.append(period.__dict__)
@@ -74,7 +74,7 @@ class Main:
                                     camera.finished = False
                                     break
                             periods = []
-                            for i in range(0, 8):
+                            for i in range(0, 5):
                                 sp = []
                                 for period in camera.session_info.periods[i]:
                                     sp.append(period.__dict__)
