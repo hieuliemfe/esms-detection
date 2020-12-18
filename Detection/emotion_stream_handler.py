@@ -30,10 +30,10 @@ emotion_valid_duration = {
 }
 emotion_maximum_buffer_duration = {
     NO_FACE_DETECTED: 300, 
-    ANGRY: 3000, 
-    HAPPY: 300, 
-    NEUTRAL: 300, 
-    OTHER: 300
+    ANGRY: 8000, 
+    HAPPY: 500, 
+    NEUTRAL: 500, 
+    OTHER: 500
 }
 # emotion_valid_duration = {
 #     NO_FACE_DETECTED: 4000, 
