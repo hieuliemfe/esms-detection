@@ -7,9 +7,12 @@ while True:
         # length = int(server_stream_socket.recv(1024).decode('UTF-8'))
         # print(length)
         msg = server_stream_socket.recv(999999).decode('UTF-8')
-        print("+1")
+        # print("+1")
         text_file = open("image.json", "w")
-
+        if 'true' in msg:
+            print("Warn!!!!!!!")
+        if 'false' in msg:
+            print("None!!!!!!!")
         text_file.write(msg)
 
         text_file.close()

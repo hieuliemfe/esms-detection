@@ -3,13 +3,16 @@ import json
 from Detection.emotion_stream_handler import angry_duration as ANGRY_DURATION
 NO_FACE_DETECTED_DURATION = 3*60*1000
 emotion_dict = {7: "No face detected", 0: "Angry", 1: "Disgusted", 2: "Fearful", 3: "Happy", 4: "Neutral", 5: "Sad", 6: "Surprised"}
+NO_FACE_DETECTED = 7
 ANGRY = 0
-HAPPY = 1
-NEUTRAL = 2
-OTHER = 3
-NO_FACE_DETECTED = 4
-negative_emotions = [0, 1, 2, 5, 7]
-positive_emotions = [3, 6]
+DISGUSTED = 1
+FEARFUL = 2
+HAPPY = 3
+NEUTRAL = 4
+SAD = 5
+SURPRISED = 6
+negative_emotions = [ANGRY, DISGUSTED, FEARFUL, SAD, NO_FACE_DETECTED]
+positive_emotions = [HAPPY, SURPRISED]
 positive_weight = 0.495
 negative_weight = 0.505
 class SessionEvaluator:
@@ -32,7 +35,7 @@ class SessionEvaluator:
         self.no_face_detected_duration_warning_max = 0
         self.emotionless_warning = False
         self.emotion_level = 0
-        for i in range(0, 5):
+        for i in range(0, 8):
             self.emotions_duration.append(0)
             self.emotions_period_count.append(0)
 
@@ -97,7 +100,7 @@ class SessionEvaluator:
         session_info.emotion_level = score
         self.emotion_level = score
         # print("Session Duration: {}".format(session_duration))
-        # for i in range(0, 5):
+        # for i in range(0, 8):
         #     print("=============================================")
         #     print("Emotion: {}".format(emotion_dict[i]))
         #     print("Total Duration: {}".format(self.emotions_duration[i]))

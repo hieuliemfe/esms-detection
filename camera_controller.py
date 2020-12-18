@@ -19,8 +19,7 @@ import logging
 cv2.ocl.setUseOpenCL(False)
 
 # dictionary which assigns each label an emotion (alphabetical order)
-# emotion_dict = {7: "No face detected", 0: "Angry", 1: "Disgusted", 2: "Fearful", 3: "Happy", 4: "Neutral", 5: "Sad", 6: "Surprised"}
-emotion_dict = {0: "Angry", 1: "Happy", 2: "Neutral", 3: "Other", 4: "No face detected"}
+emotion_dict = {7: "No face detected", 0: "Angry", 1: "Disgusted", 2: "Fearful", 3: "Happy", 4: "Neutral", 5: "Sad", 6: "Surprised"}
 class AngryPeriods:
     def __init__(self, periods):
         self.periods = periods
@@ -119,6 +118,7 @@ class CameraController:
             video_writer.write(img)
 
             img_src = self.encode_img(img)
+            print(self.stream_handler.warning)
             frame_stream_info = FrameStreamInfo(img_src, self.stream_handler.warning, self.stream_handler.current_frame.emotion)
             try:
                 connection.sendall(json.dumps(frame_stream_info.__dict__).encode('UTF-8'))
