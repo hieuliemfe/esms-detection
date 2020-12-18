@@ -69,6 +69,7 @@ class EmotionStreamHandler:
         self.temp_time = 0
         self.count = 0
         self.warning = False
+        self.warning_count = 0
     
     def add_frame(self, emotion):
 
@@ -104,6 +105,7 @@ class EmotionStreamHandler:
                             self.temp_durations[i] = [0,0]
                             if self.warning == True:
                                 self.warning = False
+                                self.warning_count += 1
                     else:                        
                         self.temp_durations[i] = [0,0]
                         duration = int(round((self.periods[i][len(self.periods[i])-1].period_end - self.periods[i][len(self.periods[i])-1].period_start)*1000))
