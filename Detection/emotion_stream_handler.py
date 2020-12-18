@@ -3,7 +3,6 @@ from datetime import datetime
 from Detection.Model.frame_info import FrameInfo
 from Detection.Model.period_info import PeriodInfo
 from Detection.Model.session_info import SessionInfo
-from math import floor
 # NO_FACE_DETECTED = 7
 # ANGRY = 0
 # DISGUSTED = 1
@@ -70,10 +69,6 @@ class EmotionStreamHandler:
         self.temp_time = 0
         self.count = 0
         self.warning = False
-        self.angry_duration_per_min = 0
-        self.count_minute = 0
-        self.temp_warning_time = 0
-        self.warning_count = 0
     
     def add_frame(self, emotion):
 
@@ -86,33 +81,20 @@ class EmotionStreamHandler:
         self.current_frame = FrameInfo(self.temp_time, passed_time, emotion)
         self.frames.append(self.current_frame)
         self.count+=1
-        tempt_min = floor(passed_time / 1000 / 60)
-        if self.temp_warning_time != 0:
-            if int(round((self.temp_time - self.temp_warning_time)*1000)) > 3000:
-                self.temp_warning_time = 0
-                self.warning = False
-        if tempt_min > self.count_minute:
-            self.count_minute = tempt_min
-            if self.angry_duration_per_min > angry_duration:
-                self.warning_count += 1
-                self.warning = True
-                self.temp_warning_time = self.temp_time
-            self.angry_duration_per_min = 0
         if self.previous_frame.timestamp is not None:
             for i in range(0, 5):
                 duration = int(round((self.current_frame.timestamp - self.previous_frame.timestamp)*1000))
                 if self.previous_frame.emotion == i and self.temp_durations[i] == [0,0]:
                     self.periods[i].append(PeriodInfo(self.previous_frame.timestamp, self.current_frame.timestamp, i))
                     self.temp_durations[i][0] += duration
-                    if i == ANGRY:
-                        self.angry_duration_per_min += duration
                 elif self.previous_frame.emotion == i and self.temp_durations[i] != [0,0]:
                     self.temp_durations[i][0] += duration
-                    if i == ANGRY:
-                        self.angry_duration_per_min += duration
                     self.periods[i][len(self.periods[i])-1].period_end = self.current_frame.timestamp
                     self.periods[i][len(self.periods[i])-1].update()
                     self.temp_durations[i][1] = 0
+                    if i == ANGRY:
+                        if self.periods[i][len(self.periods[i])-1].duration >= angry_duration:
+                            self.warning = True
                 elif self.previous_frame.emotion != i and self.temp_durations[i] == [0,0]:
                     pass
                 elif self.previous_frame.emotion != i and self.temp_durations[i] != [0,0]:
@@ -120,14 +102,16 @@ class EmotionStreamHandler:
                         self.temp_durations[i][1] += duration
                         if self.temp_durations[i][1] >= emotion_maximum_buffer_duration[i]:
                             self.temp_durations[i] = [0,0]
-                            # if self.warning == True:
-                            #     self.warning = False
+                            if self.warning == True:
+                                self.warning = False
                     else:                        
                         self.temp_durations[i] = [0,0]
                         duration = int(round((self.periods[i][len(self.periods[i])-1].period_end - self.periods[i][len(self.periods[i])-1].period_start)*1000))
                         del(self.periods[i][len(self.periods[i])-1])
         self.previous_frame = self.current_frame
     def finish(self):
+        
+
         for i in range(0, len(self.periods)):
             if len(self.periods[i]) > 0:
                 if self.periods[i][len(self.periods[i])-1].duration < emotion_valid_duration[i]:

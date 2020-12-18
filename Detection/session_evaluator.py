@@ -3,8 +3,10 @@ import json
 from Detection.emotion_stream_handler import angry_duration as ANGRY_DURATION
 NO_FACE_DETECTED_DURATION = 3*60*1000
 emotion_dict = {7: "No face detected", 0: "Angry", 1: "Disgusted", 2: "Fearful", 3: "Happy", 4: "Neutral", 5: "Sad", 6: "Surprised"}
-NEUTRAL = 2
 ANGRY = 0
+HAPPY = 1
+NEUTRAL = 2
+OTHER = 3
 NO_FACE_DETECTED = 4
 negative_emotions = [0, 1, 2, 5, 7]
 positive_emotions = [3, 6]
