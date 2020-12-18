@@ -23,17 +23,17 @@ emotion_dict = {ANGRY: "Angry", HAPPY: "Happy", NEUTRAL: "Neutral", OTHER: "Othe
 # duration in miliseconds to be considered a valid emotion period
 emotion_valid_duration = {
     NO_FACE_DETECTED: 4000, 
-    ANGRY: 250, 
-    HAPPY: 500, 
-    NEUTRAL: 1000, 
-    OTHER: 1000
+    ANGRY: 1000, 
+    HAPPY: 2000, 
+    NEUTRAL: 2000, 
+    OTHER: 2000
 }
 emotion_maximum_buffer_duration = {
-    NO_FACE_DETECTED: 300, 
-    ANGRY: 8000, 
-    HAPPY: 500, 
-    NEUTRAL: 500, 
-    OTHER: 500
+    NO_FACE_DETECTED: 500, 
+    ANGRY: 5000, 
+    HAPPY: 1500, 
+    NEUTRAL: 1500, 
+    OTHER: 1500
 }
 # emotion_valid_duration = {
 #     NO_FACE_DETECTED: 4000, 
