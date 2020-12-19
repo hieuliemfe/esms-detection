@@ -84,7 +84,7 @@ model.add(Dropout(0.25))
 model.add(Flatten())
 model.add(Dense(1024, activation='relu'))
 model.add(Dropout(0.5))
-model.add(Dense(4, activation='softmax'))
+model.add(Dense(7, activation='softmax'))
 
 # If you want to train the same model or try other models, go for this
 if mode == "train":
@@ -106,7 +106,16 @@ elif mode == "display":
     cv2.ocl.setUseOpenCL(False)
 
     # dictionary which assigns each label an emotion (alphabetical order)
-    emotion_dict = {0: "Angry", 1: "Happy", 2: "Neutral", 3: "Other", 4: "No face detected"}
+    NO_FACE_DETECTED = 7
+    ANGRY = 0
+    DISGUSTED = 1
+    FEARFUL = 2
+    HAPPY = 3
+    NEUTRAL = 4
+    SAD = 5
+    SURPRISED = 6
+    emotion_dict = {NO_FACE_DETECTED: "No face detected", ANGRY: "Angry", DISGUSTED: "Disgusted", FEARFUL: "Fearful", HAPPY: "Happy", 
+    NEUTRAL: "Neutral", SAD: "Sad", SURPRISED: "Surprised"}
 
     # start the webcam feed
     cap = cv2.VideoCapture(0)

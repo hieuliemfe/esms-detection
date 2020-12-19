@@ -86,7 +86,6 @@ class EmotionStreamHandler:
                             if self.warning == True:
                                 if i == ANGRY:
                                     self.warning = False
-                                    self.warning_count += 1
                     else:                        
                         self.temp_durations[i] = [0,0]
                         duration = int(round((self.periods[i][len(self.periods[i])-1].period_end - self.periods[i][len(self.periods[i])-1].period_start)*1000))
@@ -99,6 +98,9 @@ class EmotionStreamHandler:
             if len(self.periods[i]) > 0:
                 if self.periods[i][len(self.periods[i])-1].duration < emotion_valid_duration[i]:
                     del(self.periods[i][len(self.periods[i])-1])
+        for period in self.periods[0]:
+            if period.duration >= angry_duration:
+                self.warning_count += 1
         # ****** print out all periods ******
         # for i in range(0, len(self.periods)):
         #     print("===={}==== size: {}".format(emotion_dict[i], len(self.periods[i])))
