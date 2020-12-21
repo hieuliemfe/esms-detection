@@ -2,6 +2,10 @@
 from path_util import resource_path
 import os
 import logging
+import socket
+import json
+from pathlib import Path
+from camera_controller import CameraController
 # logging.basicConfig(filename='example.log', encoding='utf-8', level=logging.DEBUG)
 class Result:
     def __init__(self, result, periods):
@@ -16,10 +20,6 @@ class Main:
     #     p.start()
     
     def start(self):
-        import socket
-        import json
-        from pathlib import Path
-        from camera_controller import CameraController
         server_stream_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         server_stream_socket.bind(("127.0.0.1", 12345))
         server_stream_socket.listen()
