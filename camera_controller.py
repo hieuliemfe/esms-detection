@@ -118,7 +118,7 @@ class CameraController:
             video_writer.write(img)
 
             img_src = self.encode_img(img)
-            print(self.stream_handler.warning)
+            # print(self.stream_handler.warning)
             frame_stream_info = FrameStreamInfo(img_src, self.stream_handler.warning, self.stream_handler.current_frame.emotion)
             try:
                 connection.sendall(json.dumps(frame_stream_info.__dict__).encode('UTF-8'))
