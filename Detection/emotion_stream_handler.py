@@ -17,20 +17,20 @@ NEUTRAL: "Neutral", SAD: "Sad", SURPRISED: "Surprised"}
 # duration in miliseconds to be considered a valid emotion period
 emotion_valid_duration = {
     NO_FACE_DETECTED: 4000, 
-    ANGRY: 250, 
-    DISGUSTED: 250, 
-    FEARFUL: 250, 
-    HAPPY: 500, 
+    ANGRY: 700, 
+    DISGUSTED: 1000, 
+    FEARFUL: 1000, 
+    HAPPY: 1000, 
     NEUTRAL: 1000, 
-    SAD: 250, 
-    SURPRISED: 500}
+    SAD: 1000, 
+    SURPRISED: 1000}
 emotion_maximum_buffer_duration = {
     NO_FACE_DETECTED: 300, 
     ANGRY: 8000, 
     DISGUSTED: 400, 
     FEARFUL: 400, 
-    HAPPY: 300, 
-    NEUTRAL: 300, 
+    HAPPY: 1000, 
+    NEUTRAL: 1000, 
     SAD: 300, 
     SURPRISED: 300}
 
